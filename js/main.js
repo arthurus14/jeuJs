@@ -1,5 +1,5 @@
 var image = new Image();
-image.src = "./image.png";
+image.src = "./vaisseau.png";
 
 var sheetWidth = 900;
 var sheetHeigth = 495;
@@ -20,7 +20,7 @@ var srcY;
 var width = sheetWidth / cols;
 var height = sheetHeigth / rows;
 
-var currentFrame = 0;
+
 
 
 
@@ -90,7 +90,7 @@ function rock(max) {
 
 window.onload = function() {
 
-
+    draw();
 
     setInterval(function() {
         var max = getRandomInt(largeur);
@@ -104,11 +104,16 @@ window.onload = function() {
 
 function updateFrame() {
 
-    currentFrame = ++currentFrame % cols;
 
-    srcX = currentFrame * width;
+    var lar = "-" + largeur / 4;
+    var hat = "-" + hauteur / 8;
 
-    srcY = 0;
+    console.log("hauteur " + hat);
+
+
+    srcX = lar;
+
+    srcY = hat;
 
     ctx.clearRect(srcX, srcY, width, height);
 }
@@ -142,6 +147,8 @@ function logkey(e) {
     }
 }
 
+
+
 setInterval(function() {
-    //draw();
-}, 200);
+    draw();
+}, 500);
