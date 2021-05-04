@@ -14,7 +14,60 @@ images.player.src = "./personnage.png";
 const characterActions = ['up', 'right'];
 const numberOfCharacters = 10;
 const characters = [];
+const hero = [];
+//Hero
+class Hero {
+    constructor() {
+        //On reprend les éléments du personnage
+        this.width = 103.0625;
+        this.height = 113.125;
+        this.frameX = 3;
+        this.x = 150;
+        this.y = 150;
+        this.speed = 0.1;
+        //this.action = characterActions[Math.floor(Math.random() * characterActions.length)];
 
+        this.frameY = 0;
+
+    }
+    draw() {
+
+        drawSprite(images.player, this.width * this.frameX, this.height * this.frameY,
+            this.width, this.height, this.x, this.y, this.width, this.height);
+
+        //Animation du personnage vers la droite, le 13 est le nombre d'images sur la feuille
+        if (this.frameX < 13) this.frameX++;
+        else this.frameX = 3;
+
+    }
+    updateHero(key) {
+        //mouvements
+
+
+        if (key == 'd') {
+            this.x += this.speed;
+        }
+        if (key == 'q') {
+            this.x -= this.speed;
+        }
+
+        if (key == 'z') {
+            this.y -= this.speed;
+        }
+        if (key == 's') {
+            this.y += this.speed;
+        }
+        //
+
+
+
+
+
+    }
+
+}
+
+//
 
 
 class Character {
@@ -68,7 +121,7 @@ class Character {
     }
 }
 
-
+hero.push(new Hero());
 //Créer des instances de la class 
 for (i = 0; i < numberOfCharacters; i++) {
     characters.push(new Character());
@@ -88,6 +141,19 @@ function animate() {
         characters[i].update();
 
     }
+
+    hero[0].draw();
+
+    document.addEventListener('keydown', logKey);
+
+    function logKey(e) {
+
+        hero[0].updateHero(e.key);
+
+
+
+    }
+
 
 }
 
