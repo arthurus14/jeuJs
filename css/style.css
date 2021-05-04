@@ -1,0 +1,23 @@
+#canvas1 {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+body {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+.floor {
+    position: absolute;
+    top: -200%;
+    left: -200%;
+    height: 500%;
+    width: 500%;
+    background-image: url('../background.png');
+    transform: rotate3d(1, 0, 1, 50deg);
+}

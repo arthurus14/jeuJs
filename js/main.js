@@ -1,154 +1,100 @@
-var image = new Image();
-image.src = "./vaisseau.png";
+const canvas = document.getElementById('canvas1');
+const ctx = canvas.getContext('2d');
 
-var sheetWidth = 900;
-var sheetHeigth = 495;
+canvas.height = window.innerHeight;
+canvas.width = window.innerWidth;
 
+//load image
 
-var sWidth = 195;
-var sHeight = 380;
+const images = {};
+images.player = new Image();
+images.player.src = "./personnage.png";
 
-var cols = 5;
-var rows = 2;
-
-var x = 0;
-var y = 0;
-
-var srcX;
-var srcY;
-
-var width = sheetWidth / cols;
-var height = sheetHeigth / rows;
+//const characterActions = ['up', 'top right', 'right', 'down right', 'down', 'jump'];
+const characterActions = ['up', 'right'];
+const numberOfCharacters = 10;
+const characters = [];
 
 
 
+class Character {
+    constructor() {
+        //On reprend les éléments du personnage
+        this.width = 103.0625;
+        this.height = 113.125;
+        this.frameX = 3;
+        this.x = 0;
+        this.y = 0;
+        this.speed = (Math.random() * 3.5) + 1.5;
+        this.action = characterActions[Math.floor(Math.random() * characterActions.length)];
+
+        if (this.action === 'up') {
+            this.frameY = 0;
+        } else if (this.action === 'right') {
+            this.frameY = 3;
+        }
+    }
+    draw() {
+
+        drawSprite(images.player, this.width * this.frameX, this.height * this.frameY,
+            this.width, this.height, this.x, this.y, this.width, this.height);
+
+        //Animation du personnage vers la droite, le 13 est le nombre d'images sur la feuille
+        if (this.frameX < 13) this.frameX++;
+        else this.frameX = 3;
+
+    }
+    update() {
+        if (this.action === 'right') {
+            if (this.x > canvas.width + this.width) {
+                this.x = 0 - this.width;
+                this.y = Math.random() * canvas.height - this.height;
+
+            } else {
+                this.x += this.speed;
+            }
 
 
-var largeur = screen.width;
-var hauteur = screen.height;
+        } else if (this.action === 'up') {
+            if (this.y < (0 - this.height)) {
+                this.y = canvas.height + this.height;
+                this.x = Math.random() * canvas.width;
 
-
-
-
-
-var canvas = document.getElementById('canvas');
-canvas.style.background = "black";
-var ctx = canvas.getContext('2d');
-
-
-
-
-
-function getRandomInt(max) {
-    return Math.floor(Math.random() * ((max) / 3) * 2);
-}
-
-console.log(getRandomInt(3));
-
-
-function rock(max) {
-
-    var image = new Image();
-    image.src = "./image.png";
-
-    console.log('height ' + hauteur);
-
-    var y = 10;
-    var x = max;
-
-
-
-    setInterval(function() {
-
-        console.log('x ' + x);
-
-
-
-        ctx.drawImage(image, x, 10, 10, y);
-
-
-        ctx.clearRect(x, 10, 10, y - 10);
-
-        if (y < hauteur) {
-
-            y = y + 10;
-
-        } else {
-            y = 10;
-            x = 0
-
+            } else {
+                this.y -= this.speed;
+            }
         }
 
-        //x = getRandomInt(largeur);
-
-
-    }, 1000);
-
-
-}
-
-
-window.onload = function() {
-
-    draw();
-
-    setInterval(function() {
-        var max = getRandomInt(largeur);
-        rock(max);
-    }, 3000);
-
-}
-
-
-
-
-function updateFrame() {
-
-
-    var lar = "-" + largeur / 4;
-    var hat = "-" + hauteur / 8;
-
-    console.log("hauteur " + hat);
-
-
-    srcX = lar;
-
-    srcY = hat;
-
-    ctx.clearRect(srcX, srcY, width, height);
-}
-
-
-
-
-function draw() {
-
-    updateFrame();
-
-    ctx.drawImage(image, srcX, srcY, width, height, x, y, width, height);
-
-    if (x > (largeur - 195)) {
-        x = 0;
-    }
-
-
-}
-
-
-document.addEventListener("keypress", logkey);
-
-function logkey(e) {
-    //alert('logkey ' + e.code);
-
-    if (e.code == 'KeyD') {
-        //alert('en avant marche');
-
-        x = x + 10;
     }
 }
 
 
+//Créer des instances de la class 
+for (i = 0; i < numberOfCharacters; i++) {
+    characters.push(new Character());
+}
 
-setInterval(function() {
-    draw();
-}, 500);
+function drawSprite(img, sX, sY, sW, sH, dX, dY, dW, dH) {
+    ctx.drawImage(img, sX, sY, sW, sH, dX, dY, dW, dH);
+}
+
+
+
+function animate() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    //Dessine le nombre d'instance de la classe
+    for (i = 0; i < characters.length; i++) {
+        characters[i].draw();
+        characters[i].update();
+
+    }
+
+}
+
+
+window.onload = setInterval(animate, 1000 / 30);
+
+window.addEventListener('resize', function() {
+    canvas.height = window.innerHeight;
+    canvas.width = window.innerWidth;
+});
