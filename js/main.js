@@ -1,8 +1,11 @@
 const canvas = document.getElementById('canvas1');
 const ctx = canvas.getContext('2d');
 
-canvas.height = window.innerHeight;
-canvas.width = window.innerWidth;
+canvas.height = screen.height;
+canvas.width = screen.width;
+
+console.log('height ' + canvas.height);
+console.log('width ' + canvas.width);
 
 //load image
 
@@ -22,8 +25,8 @@ class Hero {
         this.width = 103.0625;
         this.height = 113.125;
         this.frameX = 3;
-        this.x = 150;
-        this.y = 150;
+        this.x = 0;
+        this.y = 0;
         this.speed = 0.1;
         //this.action = characterActions[Math.floor(Math.random() * characterActions.length)];
 
@@ -44,18 +47,51 @@ class Hero {
         //mouvements
 
 
+
         if (key == 'd') {
-            this.x += this.speed;
+
+            if (this.x >= (canvas.width - this.width)) {
+                this.x = canvas.width - this.width;
+            } else {
+                this.x += this.speed;
+            }
+
         }
         if (key == 'q') {
-            this.x -= this.speed;
+            console.log('X ' + this.y);
+            if (this.x >= 0) {
+                //this.x = 0;
+                this.x -= this.speed;
+            } else {
+                this.x = 0;
+            }
+
         }
 
         if (key == 'z') {
-            this.y -= this.speed;
+
+            if (this.y >= 0) {
+                this.y -= this.speed;
+            } else {
+                this.y = 0;
+            }
+
+
+
+
+
         }
         if (key == 's') {
-            this.y += this.speed;
+
+
+
+            if (this.y >= (canvas.height - this.height)) {
+                this.y = canvas.height - this.height;
+            } else {
+                this.y += this.speed;
+            }
+
+
         }
         //
 
@@ -121,7 +157,7 @@ class Character {
     }
 }
 
-hero.push(new Hero());
+
 //Créer des instances de la class 
 for (i = 0; i < numberOfCharacters; i++) {
     characters.push(new Character());
@@ -133,6 +169,9 @@ function drawSprite(img, sX, sY, sW, sH, dX, dY, dW, dH) {
 
 
 
+
+
+
 function animate() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     //Dessine le nombre d'instance de la classe
@@ -141,10 +180,13 @@ function animate() {
         characters[i].update();
 
     }
-
+    hero.push(new Hero());
     hero[0].draw();
 
+
     document.addEventListener('keydown', logKey);
+
+
 
     function logKey(e) {
 
@@ -159,8 +201,7 @@ function animate() {
 
 
 window.onload = setInterval(animate, 1000 / 30);
-
 window.addEventListener('resize', function() {
-    canvas.height = window.innerHeight;
-    canvas.width = window.innerWidth;
+    canvas.height = screen.height;
+    canvas.width = screen.width;
 });

@@ -14,10 +14,9 @@ body {
 
 .floor {
     position: absolute;
-    top: -200%;
-    left: -200%;
-    height: 500%;
-    width: 500%;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
     background-image: url('../background.png');
-    transform: rotate3d(1, 0, 1, 50deg);
 }
